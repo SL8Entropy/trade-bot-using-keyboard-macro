@@ -25,10 +25,18 @@ Class Instance
 		{	
 			;Msgbox this is red
 			this.errorCount := this.errorCount + 1
+			if(this.direction = "up")
+			{
+				this.direction := "down"
+			}
+			else
+			{
+				this.direction := "up"
+			}
 		}
 		else
 		{
-			Msgbox problem
+			Msgbox error, couldnt read trade history
 			ExitApp
 		}
 	}	
@@ -50,36 +58,38 @@ Class Instance
 			MouseClick, left,1757,670
 		}
 		
-		if(this.direction = "up")
-		{
-			this.direction := "down"
-		}
-		else
-		{
-			this.direction := "up"
-		}
+		
 	}
 
 }
 
 
 array := []
-array.Push(new Instance("up"))
-
+loop,5
+{
+	Value := Mod(A_Index, 2)
+	if(Value = 0){
+		array.Push(new Instance("up"))
+	}
+	else{
+		array.Push(new Instance("down"))
+	}
+}
 F1::
 
-loop{
+loop,10
+{
 	for each, Instance in array
 	{
 		Instance.getColor()
 		Instance.bet()
+		sleep 12100
 		;or whatever the equivalent for 36 seconds is
 		if(Instance.errorCount >= 5){
 			Msgbox we lost 5 times in a row :(
 			ExitApp
 		}
 	}
-sleep 6500
 }
 return
 
